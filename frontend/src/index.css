@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Cause:wght@100..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+/* Define custom fonts in theme */
+@theme {
+  --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-serif: 'EB Garamond', Georgia, Cambria, serif;
+  --font-display: 'Cause', system-ui, sans-serif;
+  
+  /* You can also define fallback fonts if you prefer */
+  --font-body: 'Poppins', system-ui, sans-serif;
+  --font-heading: 'Cause', system-ui, sans-serif;
+}
+
+/* Apply fonts globally */
+* {
+  font-family: var(--font-sans);
+}
+
+/* Or more specific approach: */
+
+/* Option 1: Apply Poppins as default for everything */
+body {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+}
+
+/* Option 2: Use different fonts for different elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cause', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+p, span, div, a, button, input, textarea {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+}
+
+.eb-garamond {
+  font-family: 'EB Garamond', Georgia, Cambria, serif;
+}
+
+/* Optional: Add font smoothing for better readability */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container utility */
+.container-custom {
+  @apply max-w-7xl mx-auto w-full;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Add these animations to your existing index.css */
+
+/* Blob animation */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Fade up animation */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+/* Pulse animations */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Slow spin animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Card hover effects */
+.hover-card {
+  transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+}
