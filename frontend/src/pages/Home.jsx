@@ -225,7 +225,7 @@ const Home = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 Your Complete{' '}
                 <span className="relative inline-block">
-                  <span className="relative z-10 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+                  <span className="relative z-10 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text">
                     Business Solution
                   </span>
                   <span className="absolute bottom-0 left-0 w-full h-3 bg-primary-200 opacity-40 rounded-lg transform -rotate-1"></span>
@@ -650,8 +650,8 @@ const Home = () => {
                     Located in central Musanze for convenient access. Ample parking available.
                   </p>
                   <Button variant="primary" size="lg" className="group">
-                    Get Directions
-                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                    <p className='text-gray-600'>Get Directions</p>
+                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300 text-gray-600" />
                   </Button>
                 </div>
               </div>
