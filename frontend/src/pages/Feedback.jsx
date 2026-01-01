@@ -540,9 +540,9 @@ Category: ${feedbackType}
                   <div className="pt-4">
                     <Button
                       type="submit"
-                      variant="primary"
+                      variant="outline"
                       size="lg"
-                      className="w-full bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group"
+                      className="w-full bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-black shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
