@@ -25,9 +25,263 @@ import {
   HelpCircle,
   Package,
   CreditCard,
-  FileCheck
+  FileCheck,
+  Book,
+  Smartphone,
+  Globe,
+  Headphones,
+  Zap,
+  Check
 } from 'lucide-react'
 import Button from '@/components/UI/Button'
+
+// Mock data function similar to AllServices
+const getFeaturedItems = () => {
+  return [
+    {
+      id: 1,
+      name: 'Premium Office Stationery',
+      category: 'office-supplies',
+      slug: 'premium-office-stationery',
+      description: 'High-quality files, folders, pens, staplers, printers & office essentials',
+      price: 5000,
+      currency: 'RWF',
+      rating: 4.9,
+      reviews: 85,
+      deliveryTime: 'Same Day',
+      popular: true,
+      featured: true,
+      type: 'product',
+      icon: 'Package',
+      color: 'from-blue-500 to-cyan-500',
+      bgColor: 'bg-gradient-to-br from-blue-50 via-white to-cyan-50',
+      features: ['Premium Quality Materials', 'Bulk Order Discounts', 'Same Day Delivery'],
+      image: '📁',
+      stats: { sales: '500+', rating: '4.9' }
+    },
+    {
+      id: 2,
+      name: 'Complete School Supplies',
+      category: 'school-supplies',
+      slug: 'complete-school-supplies',
+      description: 'Exercise books, pens, pencils, rulers, school bags & mathematical sets',
+      price: 15000,
+      currency: 'RWF',
+      rating: 4.8,
+      reviews: 64,
+      deliveryTime: '1-2 Days',
+      featured: true,
+      type: 'product',
+      icon: 'Book',
+      color: 'from-green-500 to-emerald-500',
+      bgColor: 'bg-gradient-to-br from-green-50 via-white to-emerald-50',
+      features: ['Complete Student Kits', 'School Discounts', 'Custom Branding'],
+      image: '📚',
+      stats: { sales: '300+', rating: '4.8' }
+    },
+    {
+      id: 3,
+      name: 'Professional Printing Services',
+      category: 'printing-services',
+      slug: 'professional-printing-services',
+      description: 'Document printing, photocopying, binding, laminating & passport photos',
+      price: 100,
+      currency: 'RWF',
+      unit: 'page',
+      rating: 4.9,
+      reviews: 120,
+      deliveryTime: 'Same Day',
+      popular: true,
+      type: 'service',
+      icon: 'Printer',
+      color: 'from-purple-500 to-pink-500',
+      bgColor: 'bg-gradient-to-br from-purple-50 via-white to-pink-50',
+      features: ['High-Quality Prints', 'Same Day Service', 'Large Format Available'],
+      image: '🖨️',
+      stats: { sales: '1000+', rating: '4.9' }
+    },
+    {
+      id: 4,
+      name: 'Government Services Assistance',
+      category: 'government-services',
+      slug: 'government-services-assistance',
+      description: 'IREMBO, RRA tax, RDB registration, land services & immigration',
+      price: 2000,
+      currency: 'RWF',
+      rating: 5.0,
+      reviews: 45,
+      deliveryTime: '2-3 Days',
+      popular: true,
+      type: 'service',
+      icon: 'Building',
+      color: 'from-red-500 to-orange-500',
+      bgColor: 'bg-gradient-to-br from-red-50 via-white to-orange-50',
+      features: ['Expert Assistance', 'Fast Processing', 'Document Support'],
+      image: '🏛️',
+      stats: { sales: '200+', rating: '5.0' }
+    },
+    {
+      id: 5,
+      name: 'Banking & Payment Services',
+      category: 'banking-services',
+      slug: 'banking-payment-services',
+      description: 'Deposits, withdrawals, school fees payments & bank transactions',
+      price: 1500,
+      currency: 'RWF',
+      rating: 4.8,
+      reviews: 92,
+      deliveryTime: '1 Day',
+      type: 'service',
+      icon: 'CreditCard',
+      color: 'from-amber-500 to-yellow-500',
+      bgColor: 'bg-gradient-to-br from-amber-50 via-white to-yellow-50',
+      features: ['Multiple Banks', 'Secure Transactions', 'Quick Processing'],
+      image: '🏦',
+      stats: { sales: '400+', rating: '4.8' }
+    },
+    {
+      id: 6,
+      name: 'Digital CV Writing Service',
+      category: 'digital-services',
+      slug: 'digital-cv-writing-service',
+      description: 'Professional CV writing, editing, and optimization for job applications',
+      price: 3000,
+      currency: 'RWF',
+      rating: 4.9,
+      reviews: 55,
+      deliveryTime: '2 Days',
+      featured: true,
+      type: 'service',
+      icon: 'FileText',
+      color: 'from-indigo-500 to-blue-500',
+      bgColor: 'bg-gradient-to-br from-indigo-50 via-white to-blue-50',
+      features: ['Professional Formatting', 'ATS Optimization', '24-hour Delivery'],
+      image: '💼',
+      stats: { sales: '150+', rating: '4.9' }
+    }
+  ]
+}
+
+// Get all services for the services section
+const getAllServices = () => {
+  return [
+    {
+      id: 'printing',
+      icon: Printer,
+      title: 'Printing Services',
+      description: 'Document printing, photocopying, binding & laminating',
+      count: '500+',
+      label: 'Pages Daily',
+      category: 'printing-services'
+    },
+    {
+      id: 'documentation',
+      icon: FileText,
+      title: 'Documentation',
+      description: 'CV writing, application letters, online form filling',
+      count: '200+',
+      label: 'Clients Monthly',
+      category: 'digital-services'
+    },
+    {
+      id: 'government',
+      icon: Building,
+      title: 'Government Services',
+      description: 'IREMBO, RRA, RDB, Land services assistance',
+      count: '50+',
+      label: 'Services Available',
+      category: 'government-services'
+    },
+    {
+      id: 'banking',
+      icon: Shield,
+      title: 'Secure Services',
+      description: 'Banking, payments, and confidential document handling',
+      count: '100%',
+      label: 'Secure Processing',
+      category: 'banking-services'
+    },
+    {
+      id: 'electronics',
+      icon: Smartphone,
+      title: 'Electronics & Accessories',
+      description: 'Phones, chargers, gadgets and tech accessories',
+      count: '100+',
+      label: 'Items Available',
+      category: 'electronics'
+    },
+    {
+      id: 'office',
+      icon: Package,
+      title: 'Office Supplies',
+      description: 'Complete stationery and office materials',
+      count: '200+',
+      label: 'Products',
+      category: 'office-supplies'
+    },
+    {
+      id: 'school',
+      icon: Book,
+      title: 'School Materials',
+      description: 'Educational supplies for all levels',
+      count: '150+',
+      label: 'Student Kits',
+      category: 'school-supplies'
+    },
+    {
+      id: 'online',
+      icon: Globe,
+      title: 'Online Services',
+      description: 'Digital solutions and online assistance',
+      count: '24/7',
+      label: 'Availability',
+      category: 'digital-services'
+    }
+  ]
+}
+
+// Get stats data
+const getStatsData = () => {
+  return [
+    { number: '5,000+', label: 'Happy Customers', icon: Users },
+    { number: '10+', label: 'Years Experience', icon: Award },
+    { number: '50+', label: 'Services Offered', icon: CheckCircle },
+    { number: '98%', label: 'Satisfaction Rate', icon: Star }
+  ]
+}
+
+// Safe icon component
+const SafeIcon = ({ name, size = 24, className = '', ...props }) => {
+  const iconMap = {
+    Package,
+    Book,
+    Printer,
+    Building,
+    CreditCard,
+    FileText,
+    Smartphone,
+    Globe,
+    ShoppingBag,
+    Phone,
+    MapPin,
+    Mail,
+    Star,
+    Users,
+    Award,
+    CheckCircle,
+    TrendingUp,
+    ChevronDown,
+    ChevronUp,
+    HelpCircle,
+    FileCheck,
+    Headphones,
+    Zap,
+    Check
+  }
+  
+  const IconComponent = iconMap[name] || ShoppingBag
+  return <IconComponent size={size} className={className} {...props} />
+}
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -35,110 +289,65 @@ const Home = () => {
   const [isAnimating, setIsAnimating] = useState(false)
   const [openFaq, setOpenFaq] = useState(null)
   const slideRef = useRef(null)
+  
+  // State for dynamic data
+  const [featuredProducts, setFeaturedProducts] = useState([])
+  const [services, setServices] = useState([])
+  const [stats, setStats] = useState([])
 
-  // Enhanced products for slider
-  const featuredProducts = [
-    {
-      id: 1,
-      name: 'Premium Office Stationery',
-      category: 'Office Materials',
-      description: 'High-quality files, folders, pens, staplers, printers & office essentials',
-      image: '📁',
-      icon: ShoppingBag,
-      features: ['Premium Quality Materials', 'Bulk Order Discounts', 'Same Day Delivery'],
-      stats: { sales: '500+', rating: '4.9' },
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-gradient-to-br from-blue-50 via-white to-cyan-50'
-    },
-    {
-      id: 2,
-      name: 'Complete School Supplies',
-      category: 'Education Materials',
-      description: 'Exercise books, pens, pencils, rulers, school bags & mathematical sets',
-      image: '📚',
-      icon: FileText,
-      features: ['Complete Student Kits', 'School Discounts', 'Custom Branding'],
-      stats: { sales: '300+', rating: '4.8' },
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-gradient-to-br from-green-50 via-white to-emerald-50'
-    },
-    {
-      id: 3,
-      name: 'Professional Printing Services',
-      category: 'Printing & Documentation',
-      description: 'Document printing, photocopying, binding, laminating & passport photos',
-      image: '🖨️',
-      icon: Printer,
-      features: ['High-Quality Prints', 'Same Day Service', 'Large Format Available'],
-      stats: { sales: '1000+', rating: '4.9' },
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'bg-gradient-to-br from-purple-50 via-white to-pink-50'
-    },
-    {
-      id: 4,
-      name: 'Government Services Assistance',
-      category: 'Digital Services',
-      description: 'IREMBO, RRA tax, RDB registration, land services & immigration',
-      image: '🏛️',
-      icon: Building,
-      features: ['Expert Assistance', 'Fast Processing', 'Document Support'],
-      stats: { sales: '200+', rating: '5.0' },
-      color: 'from-red-500 to-orange-500',
-      bgColor: 'bg-gradient-to-br from-red-50 via-white to-orange-50'
-    },
-    {
-      id: 5,
-      name: 'Banking & Payment Services',
-      category: 'Financial Services',
-      description: 'Deposits, withdrawals, school fees payments & bank transactions',
-      image: '🏦',
-      icon: Banknote,
-      features: ['Multiple Banks', 'Secure Transactions', 'Quick Processing'],
-      stats: { sales: '400+', rating: '4.8' },
-      color: 'from-amber-500 to-yellow-500',
-      bgColor: 'bg-gradient-to-br from-amber-50 via-white to-yellow-50'
+  // Load data on component mount
+  useEffect(() => {
+    // Simulate fetching data like AllServices component
+    const loadData = () => {
+      const featuredItems = getFeaturedItems()
+      const allServices = getAllServices()
+      const statsData = getStatsData()
+      
+      setFeaturedProducts(featuredItems)
+      setServices(allServices.slice(0, 4)) // Show only 4 services in the grid
+      setStats(statsData)
     }
-  ]
+    
+    loadData()
+  }, [])
 
-  // Services
-  const services = [
-    {
-      icon: Printer,
-      title: 'Printing Services',
-      description: 'Document printing, photocopying, binding & laminating',
-      count: '500+',
-      label: 'Pages Daily'
-    },
-    {
-      icon: FileText,
-      title: 'Documentation',
-      description: 'CV writing, application letters, online form filling',
-      count: '200+',
-      label: 'Clients Monthly'
-    },
-    {
-      icon: Building,
-      title: 'Government Services',
-      description: 'IREMBO, RRA, RDB, Land services assistance',
-      count: '50+',
-      label: 'Services Available'
-    },
-    {
-      icon: Shield,
-      title: 'Secure Services',
-      description: 'Banking, payments, and confidential document handling',
-      count: '100%',
-      label: 'Secure Processing'
+  // Enhanced slide animation
+  const handleSlideChange = (direction) => {
+    if (isAnimating || featuredProducts.length === 0) return
+    setIsAnimating(true)
+    
+    if (direction === 'next') {
+      setCurrentSlide((prev) => (prev + 1) % featuredProducts.length)
+    } else {
+      setCurrentSlide((prev) => (prev - 1 + featuredProducts.length) % featuredProducts.length)
     }
-  ]
+    
+    setTimeout(() => setIsAnimating(false), 700)
+  }
 
-  // Stats
-  const stats = [
-    { number: '5,000+', label: 'Happy Customers', icon: Users },
-    { number: '10+', label: 'Years Experience', icon: Award },
-    { number: '50+', label: 'Services Offered', icon: CheckCircle },
-    { number: '98%', label: 'Satisfaction Rate', icon: Star }
-  ]
+  const goToSlide = (index) => {
+    if (isAnimating || index === currentSlide || featuredProducts.length === 0) return
+    setIsAnimating(true)
+    setCurrentSlide(index)
+    setTimeout(() => setIsAnimating(false), 700)
+  }
+
+  // Auto slide with enhanced timing
+  useEffect(() => {
+    if (!isAutoPlaying || featuredProducts.length === 0) return
+
+    const interval = setInterval(() => {
+      if (!isAnimating) {
+        setCurrentSlide((prev) => (prev + 1) % featuredProducts.length)
+      }
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, isAnimating, featuredProducts.length])
+
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? null : index)
+  }
 
   // FAQ Items
   const faqItems = [
@@ -164,42 +373,13 @@ const Home = () => {
     }
   ]
 
-  // Enhanced slide animation
-  const handleSlideChange = (direction) => {
-    if (isAnimating) return
-    setIsAnimating(true)
-    
-    if (direction === 'next') {
-      setCurrentSlide((prev) => (prev + 1) % featuredProducts.length)
-    } else {
-      setCurrentSlide((prev) => (prev - 1 + featuredProducts.length) % featuredProducts.length)
-    }
-    
-    setTimeout(() => setIsAnimating(false), 700)
-  }
-
-  const goToSlide = (index) => {
-    if (isAnimating || index === currentSlide) return
-    setIsAnimating(true)
-    setCurrentSlide(index)
-    setTimeout(() => setIsAnimating(false), 700)
-  }
-
-  // Auto slide with enhanced timing
-  useEffect(() => {
-    if (!isAutoPlaying) return
-
-    const interval = setInterval(() => {
-      if (!isAnimating) {
-        setCurrentSlide((prev) => (prev + 1) % featuredProducts.length)
-      }
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [isAutoPlaying, isAnimating])
-
-  const toggleFaq = (index) => {
-    setOpenFaq(openFaq === index ? null : index)
+  // Don't render until data is loaded
+  if (featuredProducts.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    )
   }
 
   return (
@@ -238,23 +418,27 @@ const Home = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button 
-  variant="primary" 
-  size="lg"
-  className="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 !text-black shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 group"
->
-  <ShoppingBag size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-  Shop Products
-  <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-</Button>
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="border-2 border-primary-600 text-primary-600 hover:bg-primary-50 hover:border-primary-700 hover:text-primary-700 shadow-lg hover:shadow-xl transition-all duration-300 group"
-                >
-                  <Phone size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-                  Call Now: 0785 383 927
-                </Button>
+                <Link to="/services">
+                  <Button 
+                    variant="primary" 
+                    size="lg"
+                    className="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 !text-black shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 group"
+                  >
+                    <ShoppingBag size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
+                    Shop Products
+                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+                </Link>
+                <a href="tel:0785383927">
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="border-2 border-primary-600 text-primary-600 hover:bg-primary-50 hover:border-primary-700 hover:text-primary-700 shadow-lg hover:shadow-xl transition-all duration-300 group"
+                  >
+                    <Phone size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
+                    Call Now: 0785 383 927
+                  </Button>
+                </a>
               </div>
               
               <div className="grid grid-cols-3 gap-4 pt-6">
@@ -303,13 +487,13 @@ const Home = () => {
                             {product.image}
                           </div>
                           <div className="text-right">
-                            <span className="inline-block px-4 py-1.5 bg-white/90 backdrop-blur-sm rounded-full text-sm font-bold shadow-lg">
-                              {product.category}
+                            <span className="inline-block px-4 py-1.5 bg-white/90 backdrop-blur-sm rounded-full text-sm font-bold shadow-lg capitalize">
+                              {product.category.replace('-', ' ')}
                             </span>
                             <div className="mt-2 flex items-center justify-end space-x-1">
                               <Star size={14} className="text-yellow-500 fill-current" />
-                              <span className="text-sm font-bold">{product.stats.rating}</span>
-                              <span className="text-xs text-gray-500">({product.stats.sales})</span>
+                              <span className="text-sm font-bold">{product.rating}</span>
+                              <span className="text-xs text-gray-500">({product.reviews})</span>
                             </div>
                           </div>
                         </div>
@@ -333,7 +517,7 @@ const Home = () => {
                               className="flex items-center text-gray-600"
                             >
                               <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center mr-3 shadow-sm">
-                                <CheckCircle size={12} className="text-white" />
+                                <CheckCircle size={12} className="text-black" />
                               </div>
                               <span className="font-medium">{feature}</span>
                             </li>
@@ -343,17 +527,23 @@ const Home = () => {
                       
                       {/* Action Button */}
                       <div className="pt-6 border-t border-white/30 mt-4">
-                        <button className="w-full group/btn">
+                        <Link 
+                          to={`/${product.category}/${product.id}/${product.slug}`}
+                          className="block w-full group/btn"
+                        >
                           <div className="relative overflow-hidden rounded-xl">
                             <div className={`absolute inset-0 bg-gradient-to-r ${product.color} opacity-90 group-hover/btn:opacity-100 transition-opacity duration-300`}></div>
                             <div className="relative bg-white/10 backdrop-blur-sm py-4 px-6 flex items-center justify-between group-hover/btn:bg-white/20 transition-all duration-300">
                               <div className="flex items-center">
                                 <div className="bg-white/20 p-2 rounded-lg mr-3 group-hover/btn:bg-white/30 transition-colors duration-300">
-                                  <product.icon size={20} className="text-white" />
+                                  <SafeIcon name={product.icon} size={20} className="text-black" />
                                 </div>
                                 <div className="text-left">
-                                  <div className="text-white font-bold text-lg">View Details</div>
-                                  <div className="text-white/80 text-sm">Click to explore</div>
+                                  <div className="text-black font-bold text-lg">View Details</div>
+                                  <div className="text-black/80 text-sm">
+                                    {product.currency} {product.price?.toLocaleString()}
+                                    {product.unit && ` / ${product.unit}`}
+                                  </div>
                                 </div>
                               </div>
                               <div className="bg-white/20 p-2 rounded-full group-hover/btn:bg-white/30 group-hover/btn:translate-x-1 transition-all duration-300">
@@ -361,7 +551,7 @@ const Home = () => {
                               </div>
                             </div>
                           </div>
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -453,24 +643,28 @@ const Home = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
-              <div 
-                key={index} 
-                className="group bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 animate-fade-up"
-                style={{ animationDelay: `${index * 100}ms` }}
+              <Link 
+                key={service.id}
+                to={`/services?category=${service.category}`}
+                className="group block"
               >
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-50 text-primary-600 rounded-xl mb-6 group-hover:bg-gradient-to-br group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-white transition-all duration-300">
-                  <service.icon size={28} />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                <p className="text-gray-600 mb-6">{service.description}</p>
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <div>
-                    <div className="text-2xl font-bold text-primary-600 group-hover:text-secondary-600 transition-colors duration-300">{service.count}</div>
-                    <div className="text-sm text-gray-500">{service.label}</div>
+                <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 animate-fade-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-50 text-primary-600 rounded-xl mb-6 group-hover:bg-gradient-to-br group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-black transition-all duration-300">
+                    <service.icon size={28} />
                   </div>
-                  <ArrowRight size={20} className="text-gray-400 group-hover:text-primary-600 transition-all duration-300 group-hover:translate-x-2" />
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
+                  <p className="text-gray-600 mb-6">{service.description}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div>
+                      <div className="text-2xl font-bold text-primary-600 group-hover:text-secondary-600 transition-colors duration-300">{service.count}</div>
+                      <div className="text-sm text-gray-500">{service.label}</div>
+                    </div>
+                    <ArrowRight size={20} className="text-gray-400 group-hover:text-primary-600 transition-all duration-300 group-hover:translate-x-2" />
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           
@@ -558,14 +752,16 @@ const Home = () => {
               Still have questions? We're here to help!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="group"
-              >
-                <Phone size={20} className="mr-2" />
-                Call for Assistance
-              </Button>
+              <a href="tel:0785383927">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="group"
+                >
+                  <Phone size={20} className="mr-2" />
+                  Call for Assistance
+                </Button>
+              </a>
               <Link to="/contact">
                 <Button variant="outline" size="lg">
                   Contact Us
@@ -588,18 +784,18 @@ const Home = () => {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4 group">
-                    <div className="bg-gradient-to-br from-primary-100 to-primary-50 p-3 rounded-lg group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-white transition-all duration-300">
-                      <MapPin size={24} className="text-primary-600 group-hover:text-white transition-colors duration-300" />
+                    <div className="bg-gradient-to-br from-primary-100 to-primary-50 p-3 rounded-lg group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-black transition-all duration-300">
+                      <MapPin size={24} className="text-primary-600 group-hover:text-black transition-colors duration-300" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Our Location</h3>
-                      <p className="text-gray-600">NM 155 Musanze Kalisimbi, Musanze, Rwanda</p>
+                      <p className="text-gray-600">30m from main Road, INES RUHENGERI Road, Musanze, Rwanda</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start space-x-4 group">
-                    <div className="bg-gradient-to-br from-primary-100 to-primary-50 p-3 rounded-lg group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-white transition-all duration-300">
-                      <Phone size={24} className="text-primary-600 group-hover:text-white transition-colors duration-300" />
+                    <div className="bg-gradient-to-br from-primary-100 to-primary-50 p-3 rounded-lg group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-black transition-all duration-300">
+                      <Phone size={24} className="text-primary-600 group-hover:text-black transition-colors duration-300" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Call Us</h3>
@@ -610,8 +806,8 @@ const Home = () => {
                   </div>
                   
                   <div className="flex items-start space-x-4 group">
-                    <div className="bg-gradient-to-br from-primary-100 to-primary-50 p-3 rounded-lg group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-white transition-all duration-300">
-                      <Mail size={24} className="text-primary-600 group-hover:text-white transition-colors duration-300" />
+                    <div className="bg-gradient-to-br from-primary-100 to-primary-50 p-3 rounded-lg group-hover:from-primary-600 group-hover:to-secondary-600 group-hover:text-black transition-all duration-300">
+                      <Mail size={24} className="text-primary-600 group-hover:text-black transition-colors duration-300" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Email Us</h3>
@@ -649,10 +845,16 @@ const Home = () => {
                   <p className="text-gray-600 mb-8">
                     Located in central Musanze for convenient access. Ample parking available.
                   </p>
-                  <Button variant="primary" size="lg" className="group">
-                    <p className='text-gray-600'>Get Directions</p>
-                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300 text-gray-600" />
-                  </Button>
+                  <a 
+                    href="https://www.google.com/maps/place/GVANTO+NETWORK+PAPETERIA/@-1.5038924,29.6083611,841m/data=!3m2!1e3!4b1!4m6!3m5!1s0x19dc5b33a8f7afcd:0x794aaef516ffd1bd!8m2!3d-1.5038978!4d29.610936!16s%2Fg%2F11wvqksybb?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="primary" size="lg" className="group">
+                      <p className='text-gray-600'>Get Directions</p>
+                      <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300 text-gray-600" />
+                    </Button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -670,22 +872,26 @@ const Home = () => {
             Visit us today or contact us for all your stationery and service needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              variant="primary"
-              size="lg"
-              className="bg-black text-white hover:bg-white/10 border-2 border-white/20 group"
-            >
-              <ShoppingBag size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-              Browse Products
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-white text-white hover:bg-white/10 group"
-            >
-              <Phone size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-              Call Now: 0785 383 927
-            </Button>
+            <Link to="/services">
+              <Button
+                variant="primary"
+                size="lg"
+                className="bg-black text-black hover:bg-white/10 border-2 border-white/20 group"
+              >
+                <ShoppingBag size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
+                Browse Products
+              </Button>
+            </Link>
+            <a href="tel:0785383927">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white text-white hover:bg-white/10 group"
+              >
+                <Phone size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
+                Call Now: 0785 383 927
+              </Button>
+            </a>
           </div>
         </div>
       </section>

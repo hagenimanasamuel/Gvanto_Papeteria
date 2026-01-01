@@ -37,6 +37,7 @@ import {
     getCategoryById
 } from '@/utils/dataUtils'
 import QuickOrderModal from '@/components/QuickOrderModal'
+import CustomOrderForm from '../components/CustomOrderForm'
 
 const ProductDetail = () => {
     const { category, id, slug } = useParams()
@@ -353,49 +354,7 @@ const ProductDetail = () => {
                         )}
 
                         {/* Custom Order Section */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 mt-6">
-                            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                                <Sparkles size={20} className="mr-2 text-amber-600" />
-                                Don't See What You Need?
-                            </h3>
-                            <p className="text-gray-700 mb-4">
-                                Looking for something specific, custom printing, or bulk order?
-                                Describe your custom request and we'll get back to you with a quote.
-                            </p>
-
-                            <div className="space-y-4">
-                                <textarea
-                                    placeholder="Describe your custom order (e.g., custom printing, specific brand, bulk quantity, special size...)"
-                                    rows="3"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                />
-
-                                <div className="grid grid-cols-2 gap-3">
-                                    <input
-                                        type="text"
-                                        placeholder="Your name"
-                                        className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    />
-                                    <input
-                                        type="tel"
-                                        placeholder="Phone number"
-                                        className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    />
-                                </div>
-
-                                <Button
-                                    variant="outline"
-                                    className="w-full border-2 border-primary-600 text-primary-600 hover:bg-primary-50"
-                                    onClick={() => {
-                                        // Handle custom order submission
-                                        alert('Custom order request received! We will contact you with a quote.')
-                                    }}
-                                >
-                                    <Mail size={18} className="mr-2" />
-                                    Request Custom Quote
-                                </Button>
-                            </div>
-                        </div>
+                        <CustomOrderForm product={product} />
 
                         {/* Quantity & Actions */}
                         <div className="bg-white rounded-2xl shadow-lg p-6">

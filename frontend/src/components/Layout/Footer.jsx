@@ -41,7 +41,7 @@ const Footer = () => {
   const contactInfo = [
     { icon: Phone, text: '0785 383 927', link: 'tel:0785383927' },
     { icon: Mail, text: 'gashakavinc@gmail.com', link: 'mailto:gashakavinc@gmail.com' },
-    { icon: MapPin, text: 'NM 155 Musanze Kalisimbi, Musanze' },
+    { icon: MapPin, text: '30m from main Road, INES RUHENGERI Road, Musanze' },
   ]
 
   const socialLinks = [
