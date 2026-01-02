@@ -215,14 +215,14 @@ const Footer = () => {
         <div className="flex flex-col space-y-2">
           <a 
             href="tel:0785383927" 
-            className="bg-primary-600 hover:bg-primary-700 text-white p-3 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center"
+            className="bg-black hover:bg-primary-700 text-white p-3 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center"
             aria-label="Call us"
           >
             <Phone size={20} />
           </a>
           <a 
             href="mailto:gashakavinc@gmail.com" 
-            className="bg-secondary-600 hover:bg-secondary-700 text-white p-3 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center"
+            className="bg-black hover:bg-secondary-700 text-white p-3 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center"
             aria-label="Email us"
           >
             <Mail size={20} />

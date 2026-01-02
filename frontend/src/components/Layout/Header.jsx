@@ -33,9 +33,11 @@ import {
   Star,
   CheckCircle,
   TrendingUp,
-  Zap
+  Zap,
+  ArrowRight
 } from 'lucide-react'
 import Logo from './Logo'
+import { searchItems, getIconComponent, getCartCount } from '@/utils/dataUtils'
 
 // Safe icon mapping
 const iconMap = {
@@ -68,6 +70,7 @@ const iconMap = {
   Menu: Menu,
   X: X,
   ChevronDown: ChevronDown,
+  ArrowRight: ArrowRight,
   Star: Star,
   CheckCircle: CheckCircle,
   TrendingUp: TrendingUp,
@@ -79,180 +82,25 @@ const SafeIcon = ({ name, size = 18, className = '', ...props }) => {
   return <IconComponent size={size} className={className} {...props} />
 }
 
-// Mock data for search - similar to what's in AllServices
-const mockSearchData = [
-  {
-    id: 1,
-    name: 'Office Stationery Set',
-    category: 'office-supplies',
-    price: 5000,
-    slug: 'office-stationery',
-    icon: 'Package',
-    description: 'Complete office stationery package',
-    rating: 4.5,
-    reviews: 24,
-    deliveryTime: '1-2 Days',
-    popular: true,
-    type: 'product'
-  },
-  {
-    id: 2,
-    name: 'Document Printing',
-    category: 'printing-services',
-    price: 100,
-    slug: 'document-printing',
-    icon: 'Printer',
-    description: 'High-quality document printing',
-    rating: 4.8,
-    reviews: 36,
-    deliveryTime: 'Same Day',
-    popular: true,
-    type: 'service'
-  },
-  {
-    id: 3,
-    name: 'Student Kit',
-    category: 'school-supplies',
-    price: 15000,
-    slug: 'student-kit',
-    icon: 'Book',
-    description: 'Complete student essentials package',
-    rating: 4.3,
-    reviews: 18,
-    deliveryTime: '1-3 Days',
-    featured: true,
-    type: 'product'
-  },
-  {
-    id: 4,
-    name: 'Government Services Assistance',
-    category: 'government-services',
-    price: 2000,
-    slug: 'government-services',
-    icon: 'Building',
-    description: 'IREMBO, RRA, RDB documentation',
-    rating: 4.7,
-    reviews: 42,
-    deliveryTime: '2-3 Days',
-    popular: true,
-    type: 'service'
-  },
-  {
-    id: 5,
-    name: 'Banking Services',
-    category: 'banking-services',
-    price: 1500,
-    slug: 'banking-services',
-    icon: 'CreditCard',
-    description: 'Financial transactions and payments',
-    rating: 4.6,
-    reviews: 29,
-    deliveryTime: '1 Day',
-    type: 'service'
-  },
-  {
-    id: 6,
-    name: 'Smartphone Accessories',
-    category: 'electronics',
-    price: 8000,
-    slug: 'smartphone-accessories',
-    icon: 'Smartphone',
-    description: 'Phone chargers and accessories',
-    rating: 4.4,
-    reviews: 31,
-    deliveryTime: '1-2 Days',
-    type: 'product'
-  },
-  {
-    id: 7,
-    name: 'CV Writing Service',
-    category: 'digital-services',
-    price: 3000,
-    slug: 'cv-writing',
-    icon: 'FileText',
-    description: 'Professional CV writing and editing',
-    rating: 4.9,
-    reviews: 55,
-    deliveryTime: '2 Days',
-    featured: true,
-    type: 'service'
-  },
-  {
-    id: 8,
-    name: 'Paper Products Pack',
-    category: 'paper-products',
-    price: 2500,
-    slug: 'paper-products',
-    icon: 'FileText',
-    description: 'Various paper types and sizes',
-    rating: 4.2,
-    reviews: 16,
-    deliveryTime: '1-2 Days',
-    type: 'product'
-  },
-  {
-    id: 9,
-    name: 'Photocopy Services',
-    category: 'printing-services',
-    price: 50,
-    slug: 'photocopy-services',
-    icon: 'Printer',
-    description: 'High-speed photocopying',
-    rating: 4.5,
-    reviews: 28,
-    deliveryTime: 'Same Day',
-    type: 'service'
-  },
-  {
-    id: 10,
-    name: 'Laptop Accessories',
-    category: 'electronics',
-    price: 12000,
-    slug: 'laptop-accessories',
-    icon: 'Laptop',
-    description: 'Laptop bags and accessories',
-    rating: 4.3,
-    reviews: 22,
-    deliveryTime: '2-3 Days',
-    type: 'product'
-  }
-]
-
-// Search function similar to AllServices component
-const searchItems = (query) => {
-  if (!query.trim()) return []
-  
-  const searchTerm = query.toLowerCase().trim()
-  
-  return mockSearchData.filter(item => {
-    // Search in multiple fields
-    return (
-      item.name.toLowerCase().includes(searchTerm) ||
-      item.description.toLowerCase().includes(searchTerm) ||
-      item.category.toLowerCase().includes(searchTerm) ||
-      item.type.toLowerCase().includes(searchTerm)
-    )
-  })
-}
-
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
   const [scrolled, setScrolled] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
-  const [showSearchResults, setShowSearchResults] = useState(false)
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false)
   const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
   const location = useLocation()
   const navigate = useNavigate()
   const dropdownRef = useRef(null)
   const mobileMenuRef = useRef(null)
-  const searchRef = useRef(null)
+  const desktopSearchRef = useRef(null)
+  const mobileSearchRef = useRef(null)
   const searchInputRef = useRef(null)
   const mobileSearchInputRef = useRef(null)
-  const searchResultsRef = useRef(null)
 
-  // Close dropdowns when clicking outside - IMPROVED VERSION
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Close dropdowns
@@ -268,11 +116,18 @@ const Header = () => {
         setIsMenuOpen(false)
       }
       
-      // Close search results
-      if (searchRef.current && 
-          !searchRef.current.contains(event.target) &&
+      // Close desktop search dropdown
+      if (desktopSearchRef.current && 
+          !desktopSearchRef.current.contains(event.target) &&
           !event.target.closest('.search-result-item')) {
-        setShowSearchResults(false)
+        setShowSearchDropdown(false)
+      }
+      
+      // Close mobile search dropdown
+      if (mobileSearchRef.current && 
+          !mobileSearchRef.current.contains(event.target) &&
+          !event.target.closest('.search-result-item')) {
+        setShowSearchDropdown(false)
       }
     }
 
@@ -295,6 +150,11 @@ const Header = () => {
     setActiveDropdown(null)
   }, [location])
 
+  // Update cart count
+  useEffect(() => {
+    setCartCount(getCartCount())
+  }, [location])
+
   // Focus mobile search input when menu opens
   useEffect(() => {
     if (isMenuOpen && mobileSearchInputRef.current) {
@@ -304,41 +164,64 @@ const Header = () => {
     }
   }, [isMenuOpen])
 
-  const handleSearch = (query) => {
-    setSearchQuery(query)
-    if (query.trim().length > 1) {
-      const results = searchItems(query)
-      setSearchResults(results)
-      setShowSearchResults(true)
+  // Handle search input change
+  const handleSearchChange = (value) => {
+    setSearchQuery(value)
+    if (value.trim().length > 1) {
+      const results = searchItems(value)
+      setSearchResults(results.slice(0, 5)) // Show only top 5 results
+      setShowSearchDropdown(true)
     } else {
-      setShowSearchResults(false)
+      setShowSearchDropdown(false)
       setSearchResults([])
     }
   }
 
+  // Handle search submission
   const handleSearchSubmit = (e) => {
-    if (e) e.preventDefault()
+    e?.preventDefault()
     if (searchQuery.trim()) {
-      navigate(`/services?search=${encodeURIComponent(searchQuery)}`)
-      setShowSearchResults(false)
+      // If there are search results, navigate to the first one
+      if (searchResults.length > 0) {
+        const firstResult = searchResults[0]
+        navigate(`/${firstResult.category}/${firstResult.id}/${firstResult.slug}`)
+      } else {
+        // Navigate to services page with search query
+        navigate(`/services?search=${encodeURIComponent(searchQuery)}`)
+      }
+      setShowSearchDropdown(false)
       setSearchQuery('')
       setIsMenuOpen(false)
     }
   }
 
-  const handleClearSearch = () => {
+  // Handle key press (Enter)
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit(e)
+    }
+  }
+
+  // Handle result click
+  const handleResultClick = (item) => {
+    navigate(`/${item.category}/${item.id}/${item.slug}`)
+    setShowSearchDropdown(false)
     setSearchQuery('')
-    setShowSearchResults(false)
+    setIsMenuOpen(false)
+  }
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery('')
     setSearchResults([])
+    setShowSearchDropdown(false)
     searchInputRef.current?.focus()
     mobileSearchInputRef.current?.focus()
   }
 
-  const handleResultClick = () => {
-    setShowSearchResults(false)
-    setSearchQuery('')
-    setSearchResults([])
-    setIsMenuOpen(false)
+  const ItemIcon = ({ item }) => {
+    const Icon = getIconComponent(item?.icon || 'ShoppingBag')
+    return <Icon size={20} />
   }
 
   const isActive = (path) => {
@@ -423,6 +306,136 @@ const Header = () => {
     }
   ]
 
+  // Search Results Dropdown Component
+  const SearchResultsDropdown = ({ isMobile = false }) => {
+    if (!showSearchDropdown) return null
+
+    return (
+      <div className={`absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-96 overflow-y-auto z-50 ${
+        isMobile ? 'mobile-search-results' : ''
+      }`}>
+        {searchResults.length === 0 ? (
+          <div className="p-8 text-center">
+            <Search size={32} className="mx-auto text-gray-400 mb-3" />
+            <h4 className="font-semibold text-gray-900 mb-2">No results found</h4>
+            <p className="text-gray-600 text-sm mb-4">
+              We couldn't find any products or services matching "{searchQuery}"
+            </p>
+            <button
+              onClick={() => {
+                navigate(`/services?search=${encodeURIComponent(searchQuery)}`)
+                setShowSearchDropdown(false)
+                setSearchQuery('')
+                setIsMenuOpen(false)
+              }}
+              className="text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center justify-center mx-auto"
+            >
+              Browse all products and services <ArrowRight size={14} className="ml-1" />
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="px-4 py-3 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-gray-700">
+                  Search Results ({searchResults.length})
+                </span>
+                <button
+                  onClick={() => {
+                    navigate(`/services?search=${encodeURIComponent(searchQuery)}`)
+                    setShowSearchDropdown(false)
+                    setSearchQuery('')
+                    setIsMenuOpen(false)
+                  }}
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center"
+                >
+                  View all results <ArrowRight size={14} className="ml-1" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="max-h-80 overflow-y-auto">
+              {searchResults.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleResultClick(item)}
+                  className="w-full p-4 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 text-left search-result-item"
+                >
+                  <div className="flex items-start">
+                    <div className={`p-3 rounded-lg ${
+                      item.type === 'service' 
+                        ? 'bg-gradient-to-br from-green-100 to-emerald-100'
+                        : 'bg-gradient-to-br from-blue-100 to-indigo-100'
+                    } mr-3 flex-shrink-0`}>
+                      <ItemIcon item={item} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between mb-1">
+                        <h4 className="font-semibold text-gray-900 line-clamp-1">{item.name}</h4>
+                        <span className="text-sm font-bold text-gray-900 ml-2 whitespace-nowrap">
+                          {item.currency || 'RWF'} {item.price?.toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                        {item.description}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          item.type === 'service' 
+                            ? 'bg-green-100 text-green-700' 
+                            : 'bg-blue-100 text-blue-700'
+                        }`}>
+                          {item.type === 'service' ? 'Service' : 'Product'}
+                        </span>
+                        {item.popular && (
+                          <span className="inline-flex items-center px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full">
+                            <TrendingUp size={10} className="mr-1" />
+                            Popular
+                          </span>
+                        )}
+                        {item.featured && (
+                          <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">
+                            <Star size={10} className="mr-1" />
+                            Featured
+                          </span>
+                        )}
+                        {item.deliveryTime?.includes('Same') && (
+                          <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                            <Zap size={10} className="mr-1" />
+                            Fast Delivery
+                          </span>
+                        )}
+                        <div className="flex items-center ml-auto">
+                          <Star size={12} className="text-yellow-500 fill-current mr-1" />
+                          <span className="text-xs font-bold text-gray-900">{item.rating || 4.5}</span>
+                          {item.reviews && (
+                            <span className="text-xs text-gray-500 ml-1">({item.reviews})</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {searchQuery.trim() && (
+              <div className="p-4 border-t border-gray-100 bg-gray-50">
+                <button
+                  onClick={() => handleSearchSubmit()}
+                  className="w-full flex items-center justify-center bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-black font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  <Search size={18} className="mr-2" />
+                  Search for "{searchQuery}"
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    )
+  }
+
   const TopAnnouncementBar = () => (
     <div className="bg-gradient-to-r from-primary-600 via-primary-700 to-secondary-600 text-black py-2">
       <div className="container-custom px-4">
@@ -453,104 +466,6 @@ const Header = () => {
       </div>
     </div>
   )
-
-  const SearchResults = () => {
-    if (!showSearchResults) return null
-
-    return (
-      <div 
-        ref={searchResultsRef}
-        className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-fadeIn"
-      >
-        <div className="p-3">
-          <div className="flex items-center justify-between mb-2 px-2">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-              Search Results
-            </span>
-            <span className="text-xs text-gray-500">
-              {searchResults.length} {searchResults.length === 1 ? 'item' : 'items'} found
-            </span>
-          </div>
-          
-          {searchResults.length === 0 ? (
-            <div className="text-center py-6">
-              <Search size={32} className="mx-auto text-gray-400 mb-3" />
-              <p className="text-gray-700 font-medium">No results found for "{searchQuery}"</p>
-              <p className="text-sm text-gray-500 mt-1">Try different keywords</p>
-            </div>
-          ) : (
-            <>
-              <div className="max-h-72 overflow-y-auto">
-                {searchResults.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={`/${item.category}/${item.id}/${item.slug}`}
-                    className="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors group border-b border-gray-100 last:border-b-0 search-result-item"
-                    onClick={handleResultClick}
-                  >
-                    <div className={`p-2 rounded-lg ${
-                      item.type === 'service' 
-                        ? 'bg-gradient-to-br from-green-100 to-emerald-100'
-                        : 'bg-gradient-to-br from-blue-100 to-indigo-100'
-                    } mr-3 flex-shrink-0`}>
-                      <SafeIcon name={item.icon} size={18} className={
-                        item.type === 'service' ? 'text-emerald-600' : 'text-indigo-600'
-                      } />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <div className="font-semibold text-gray-900 truncate group-hover:text-primary-600">
-                          {item.name}
-                        </div>
-                        {item.popular && (
-                          <span className="flex-shrink-0 inline-flex items-center px-2 py-0.5 bg-gradient-to-r from-yellow-500 to-amber-500 text-white text-xs font-bold rounded-full">
-                            <TrendingUp size={10} className="mr-1" />
-                            Popular
-                          </span>
-                        )}
-                        {item.featured && (
-                          <span className="flex-shrink-0 inline-flex items-center px-2 py-0.5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full">
-                            <Star size={10} className="mr-1" />
-                            Featured
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-xs text-gray-500 capitalize mt-0.5">
-                        {item.category?.replace('-', ' ') || 'Product'}
-                        {item.type && ` • ${item.type}`}
-                      </div>
-                      <div className="flex items-center mt-1">
-                        <Star size={12} className="text-yellow-500 fill-current mr-1" />
-                        <span className="text-xs font-bold text-gray-900">{item.rating || 4.5}</span>
-                        {item.reviews && (
-                          <span className="text-xs text-gray-500 ml-1">({item.reviews})</span>
-                        )}
-                        <span className="mx-2 text-gray-300">•</span>
-                        <span className="text-xs text-gray-600">{item.deliveryTime}</span>
-                      </div>
-                    </div>
-                    <div className="text-sm font-bold text-primary-600 ml-3 flex-shrink-0">
-                      RWF {item.price?.toLocaleString() || '0'}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              
-              {searchQuery.trim() && (
-                <Link
-                  to={`/services?search=${encodeURIComponent(searchQuery)}`}
-                  className="block text-center py-3 text-sm font-semibold text-primary-600 hover:text-primary-700 border-t border-gray-100 mt-2 bg-gray-50 hover:bg-gray-100 transition-colors search-result-item"
-                  onClick={handleResultClick}
-                >
-                  View all {searchResults.length} results for "{searchQuery}"
-                </Link>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    )
-  }
 
   const DesktopNavItem = ({ item }) => {
     return (
@@ -665,36 +580,37 @@ const Header = () => {
             </nav>
 
             {/* Search Bar - Desktop */}
-            <div className="hidden lg:block relative flex-1 max-w-md mx-6" ref={searchRef}>
+            <div className="hidden lg:block relative flex-1 max-w-md mx-6" ref={desktopSearchRef}>
               <form onSubmit={handleSearchSubmit} className="relative">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={20} />
                   <input
                     ref={searchInputRef}
                     type="text"
-                    placeholder="Search products, services, categories..."
-                    className="w-full pl-12 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 placeholder-gray-500 transition-all duration-200"
+                    placeholder="Search prod..."
+                    className="w-full pl-12 pr-12 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 shadow-lg"
                     value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    onFocus={() => {
-                      setIsSearchFocused(true)
-                      if (searchQuery.trim().length > 1) {
-                        setShowSearchResults(true)
-                      }
-                    }}
-                    onBlur={() => setIsSearchFocused(false)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    onFocus={() => searchQuery.trim() && setShowSearchDropdown(true)}
                   />
                   {searchQuery && (
                     <button
                       type="button"
-                      onClick={handleClearSearch}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                      onClick={clearSearch}
+                      className="absolute right-16 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
                     >
-                      <X size={18} />
+                      <X size={20} />
                     </button>
                   )}
+                  <button
+                    type="submit"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-primary-600 to-secondary-600 text-black px-4 py-2 rounded-lg hover:opacity-90 transition-opacity z-10"
+                  >
+                    Search
+                  </button>
                 </div>
-                <SearchResults />
+                <SearchResultsDropdown />
               </form>
             </div>
 
@@ -704,6 +620,11 @@ const Header = () => {
               <Link to="/cart" className="relative">
                 <button className="hidden lg:flex items-center justify-center w-12 h-12 rounded-xl hover:bg-gray-100 transition-colors group relative">
                   <ShoppingBag size={22} className="text-gray-700 group-hover:text-primary-600" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-black text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
+                      {cartCount}
+                    </span>
+                  )}
                 </button>
               </Link>
 
@@ -740,80 +661,33 @@ const Header = () => {
               className="xl:hidden absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 max-h-[85vh] overflow-y-auto"
             >
               {/* Mobile Search - Enhanced with search button */}
-              <div className="p-4 border-b border-gray-100" ref={searchRef}>
+              <div className="p-4 border-b border-gray-100" ref={mobileSearchRef}>
                 <div className="flex items-center gap-2">
                   <form onSubmit={handleSearchSubmit} className="flex-1 relative">
                     <div className="relative">
-                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={20} />
                       <input
                         ref={mobileSearchInputRef}
                         type="text"
-                        placeholder="Search products, services..."
-                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900"
+                        placeholder="Search for products, services, or information..."
+                        className="w-full pl-12 pr-12 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 shadow-lg"
                         value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        onFocus={() => {
-                          setIsSearchFocused(true)
-                          if (searchQuery.trim().length > 1) {
-                            setShowSearchResults(true)
-                          }
-                        }}
-                        onBlur={() => setIsSearchFocused(false)}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        onFocus={() => searchQuery.trim() && setShowSearchDropdown(true)}
                         enterKeyHint="search"
                       />
                       {searchQuery && (
                         <button
                           type="button"
-                          onClick={handleClearSearch}
-                          className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                          onClick={clearSearch}
+                          className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1 z-10"
                         >
                           <X size={18} />
                         </button>
                       )}
                     </div>
-                    {showSearchResults && (
-                      <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 z-10 max-h-64 overflow-y-auto">
-                        {searchResults.length === 0 ? (
-                          <div className="p-4 text-center">
-                            <Search size={24} className="mx-auto text-gray-400 mb-2" />
-                            <p className="text-gray-700 font-medium">No results found</p>
-                            <p className="text-sm text-gray-500">Try different keywords</p>
-                          </div>
-                        ) : (
-                          <>
-                            {searchResults.slice(0, 5).map((item) => (
-                              <Link
-                                key={item.id}
-                                to={`/${item.category}/${item.id}/${item.slug}`}
-                                className="flex items-center p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 search-result-item"
-                                onClick={handleResultClick}
-                              >
-                                <div className={`p-2 rounded-lg ${
-                                  item.type === 'service' 
-                                    ? 'bg-gradient-to-br from-green-100 to-emerald-100'
-                                    : 'bg-gradient-to-br from-blue-100 to-indigo-100'
-                                } mr-3`}>
-                                  <SafeIcon name={item.icon} size={18} className={
-                                    item.type === 'service' ? 'text-emerald-600' : 'text-indigo-600'
-                                  } />
-                                </div>
-                                <div className="flex-1">
-                                  <div className="font-semibold text-gray-900">{item.name}</div>
-                                  <div className="text-xs text-gray-500">{item.category?.replace('-', ' ')}</div>
-                                </div>
-                              </Link>
-                            ))}
-                            <button
-                              onClick={handleSearchSubmit}
-                              className="w-full py-3 text-center bg-primary-50 hover:bg-primary-100 text-primary-600 font-semibold border-t border-gray-100 flex items-center justify-center gap-2 search-result-item"
-                            >
-                              <Search size={16} />
-                              Search for "{searchQuery}"
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    )}
+                    <SearchResultsDropdown isMobile={true} />
                   </form>
                   {/* Mobile Search Button */}
                   <button
@@ -830,7 +704,7 @@ const Header = () => {
                     <Search size={20} />
                   </button>
                 </div>
-                {searchQuery.trim() && !showSearchResults && (
+                {searchQuery.trim() && !showSearchDropdown && (
                   <div className="mt-2 text-xs text-gray-500 flex items-center">
                     <Search size={12} className="mr-1" />
                     Press Enter or click search button
@@ -931,6 +805,11 @@ const Header = () => {
                   >
                     <ShoppingBag size={20} className="mr-2" />
                     View Cart
+                    {cartCount > 0 && (
+                      <span className="ml-2 bg-red-500 text-black text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
+                        {cartCount}
+                      </span>
+                    )}
                   </Link>
                   <button
                     onClick={() => {

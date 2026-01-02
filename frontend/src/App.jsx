@@ -15,6 +15,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import Feedback from './pages/Feedback'
 import Help from './pages/Help'
+import NotFound from './pages/NotFound'
 
 function App() {
   useEffect(() => {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/help" element={<Help />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </Router>
