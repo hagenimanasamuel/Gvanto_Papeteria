@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Prevent indexing of non-content or technical paths
+Disallow: /cart
+Disallow: /feedback
+
+# Sitemap
+Sitemap: https://www.gvantopapeteria.com/sitemap.xml
